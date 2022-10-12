@@ -18,7 +18,7 @@ It should have functions **like**:
 The algorithms can inform the user interface file about what they need to run.
 So, for instance, to set up a hash algorithm, we might need:
 
-{
+[
     {
         question: 'What is the hash table size?',
         loval: 6,
@@ -28,5 +28,12 @@ So, for instance, to set up a hash algorithm, we might need:
         question: 'What hash algorithm do you want to use?',
         choices: ['foo', 'bar', 'what']
     },
-}
+]
     
+For algorithms, store the list in a the top of the interface file or on JSON:
+
+{
+    "Binary Search Tree": `bst module`,
+    "Hash Table": `hash table module`,
+
+}
