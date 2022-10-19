@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import listOfAlgorithms from "./algorithms/listOfAlgorithms.js";
+import { useState } from "react";
 
 function App() {
+  const [algorithm, setAlgorith] = useState(null);
+
+  const initialSelection = !algorithm && (
+    <select name="algo" id="algo" onChange={(e) => setAlgorith(e.target.value)}>
+      {Object.keys(listOfAlgorithms).map((algo) => (
+        <option key={algo} value={algo}>
+          {algo}
+        </option>
+      ))}
+    </select>
+  );
+
+  const secondSelection = algorithm && (
+    <select name="questions" id="questions">
+      {listOfAlgorithms[algorithm].map((algo) => (
+        <option key={algo.question} value={algo.question}>
+          {algo.question}
+        </option>
+      ))}
+    </select>
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {initialSelection}
+      <div>{secondSelection}</div>
+    </>
   );
 }
 
