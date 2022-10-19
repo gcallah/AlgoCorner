@@ -2,6 +2,11 @@ import listOfAlgorithms from "./algorithms/listOfAlgorithms.js";
 import { useState } from "react";
 
 function App() {
+/*
+ * algoChoice = MainPage()
+ * OptionsePage(algoChoice)
+ *
+ * */
   const [algorithm, setAlgorith] = useState(null);
 
   const initialSelection = !algorithm && (
