@@ -1,8 +1,16 @@
-import { questions as hashTableQuestions } from "./hashTable.js";
+import { hashTableQuestions } from "./hashTable.js";
+import { bstQuestions } from "./binarySearchTree.js";
 
-const listOfAlgorithms = {
-  BinarySearchTree: "bst module",
-  HashTable: hashTableQuestions,
+
+const options = {
+  "Binary Search Tree": {
+    questions: bstQuestions
+  },
+  "Hash Table": {
+    questions: hashTableQuestions
+  },
 };
 
-export default listOfAlgorithms;
+export const listOfAlgos = Object.keys(options)
+
+export default options;
