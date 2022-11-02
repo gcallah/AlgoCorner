@@ -25,7 +25,7 @@ export default function MainPage() {
   return (
     <div>
       <div>
-        <h1>{renderResult()}</h1>
+        <p>{renderResult()}</p>
       </div>
       <div>
         <select value={algo} onChange={handleOnChange}>

@@ -1,4 +1,6 @@
 import MainPage from "./pages/Main";
+import Header from "./components/Layout/Header";
+import "./App.css";
 
 
 function App() {
@@ -8,7 +10,9 @@ function App() {
  *
  * */
 
-  return (<MainPage />);
+  return (<>
+  <Header />
+  <MainPage /></>);
 }
 
 export default App;
