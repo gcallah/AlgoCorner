@@ -17,8 +17,8 @@ export default function MainPage() {
   const renderResult = () => {
     let result;
     algo === "select Algorithm"
-      ? (result = "select Algorithm")
-      : (result = makeFirstLetterCapital(algo));
+      ? (result = "")
+      : (result = "You have picked " + makeFirstLetterCapital(algo));
     return result;
   };
 
