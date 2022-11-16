@@ -1,3 +1,4 @@
+
 export let bstQuestions = [
     {
         question: 'How many nodes do you want in your Binary Search Tree',
@@ -8,3 +9,5 @@ export let bstQuestions = [
         type: 'text',
     },
 ]
+
+
