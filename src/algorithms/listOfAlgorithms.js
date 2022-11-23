@@ -1,5 +1,5 @@
 import { hashTableQuestions } from "./hashTable.js";
-import { bstQuestions } from "./binarySearchTree.js";
+import { bstQuestions } from "../forms/binarySearchTree";
 
 
 const options = {
