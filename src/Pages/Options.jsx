@@ -1,10 +1,9 @@
 import options from "../algorithms/listOfAlgorithms";
-import { BinarySearchTree, useBinarySearchTree } from "react-tree-vis";
 import { useState } from "react";
+import Diagram from "../components/GoJS/Diagram";
 
 export default function OptionsPage({ algoChoice }) {
   const algo = options[algoChoice].questions;
-  const { ref, insert, remove } = useBinarySearchTree();
   const [data, setData] = useState([])
   
 
@@ -43,7 +42,7 @@ export default function OptionsPage({ algoChoice }) {
   return (
     <>
       {elements}
-      <BinarySearchTree data={data} ref={ref} />
+      <Diagram nodes={data}/>
     </>
   );
 }
