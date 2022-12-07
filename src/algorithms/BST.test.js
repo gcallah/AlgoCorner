@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
 
+
 describe("creation of bstNode", () => {
   test("should correctly create a node", () => {
     const node = new BSTNode(36);
@@ -25,8 +26,8 @@ describe("creation of binarySearchTree", () => {
   });
 });
 
-describe("insertion in binarySearchTree", () => {
-  test("it should add a child node to the right of the root node", () => {
+describe("insertion of single Node in binarySearchTree", () => {
+  test("it should add a child node to the left of the root node", () => {
     let bst = new BST();
     let rootNode = new BSTNode(36);
     bst.insertNode(rootNode);
@@ -82,8 +83,63 @@ describe("insertion in binarySearchTree", () => {
     let rootNode = new BSTNode(36);
     bst.insertNode(rootNode);
     let node2 = new BSTNode(36);
-    expect(bst.insertNode(node2)).toEqual({
-      root: { data: 36, left: null, right: null },
-    });
+    expect(bst.root.data).toEqual(36)
+    expect(bst.root.left).toEqual(null)
+    expect(bst.root.right).toEqual(null)
   });
 });
+
+
+describe("Optimized tests", () => {
+  test("Traversals", () => {
+    let bst = new BST();
+    [10,5,15,2,7,20].forEach(num => bst.insertNode(new BSTNode(num)))
+    expect(new Set(bst.preorderTraversal(bst.root))).toEqual(new Set([10,5,2,7,15,20]));
+    expect(new Set(bst.postorderTraversal(bst.root))).toEqual(new Set([2, 7,5,20,15,10]));
+    expect(new Set(bst.inorderTraversal(bst.root))).toEqual(new Set([2, 5,7,10,15,20]));
+  });
+
+  test("searching for a node", () => {
+    let bst = new BST();
+    expect(bst.searchNode(bst.root, 10)).toEqual(null);
+    let newNode = new BSTNode(10);
+    bst.insertNode(newNode);
+    expect(bst.searchNode(bst.root, 10)).toEqual(newNode);
+  });
+
+  test("deletion of node", () => {
+    let bst = new BST();
+    bst.remove(10)
+    expect(bst.searchNode(bst.root, 10)).toEqual(null);
+    let newNode = new BSTNode(10);
+    bst.insertNode(newNode)
+    bst.remove(10)
+    expect(bst.searchNode(bst.root, 10)).toEqual(null);
+  });
+
+  test("validity of BST", () => {
+    let bst = new BST();
+    expect(bst.isValidBST()).toEqual(true);
+    let goodNode = new BSTNode(10);
+    bst.insertNode(goodNode);
+    expect(bst.isValidBST()).toEqual(true);
+    let badNode = new BSTNode(20);
+    bst.root.left = badNode;
+    expect(bst.isValidBST()).toEqual(false);
+  });
+
+
+  test("insertion of random values", () => {
+    const test = Array.from({length: 6}, () => Math.floor(Math.random() * 100));
+    let bst = new BST();
+    for (const number of test) {
+      let newNode = new BSTNode(number);
+      bst.insertNode(newNode);
+      expect(bst.searchNode(bst.root, number)).toEqual(newNode);
+      expect(bst.isValidBST()).toEqual(true);
+    }
+  });
+});
+
+
+
