@@ -1,11 +1,11 @@
-class TrieNode {
+export class TrieNode {
   constructor() {
     this.end = false;
     this.keys = {};
   }
 }
 
-class Trie {
+export default class Trie {
   constructor() {
     this.root = new TrieNode();
   }
@@ -20,6 +20,10 @@ class Trie {
     } else {
       this.insert(word.substring(1), node.keys[word[0]]);
     }
+  }
+
+  isEmpty() {
+    return Object.keys(this.root.keys).length === 0;
   }
 
   search(word, node = this.root) {

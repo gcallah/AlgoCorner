@@ -27,15 +27,15 @@ describe("Optimized tests", () => {
   });
 
   test("Traversals", () => {
-    // expect(new Set(SampleBst.preorderTraversal(SampleBst.root))).toEqual(
-    //   new Set(SampleInputs.preorderTraversal)
-    // );
-    // expect(new Set(SampleBst.postorderTraversal(SampleBst.root))).toEqual(
-    //   new Set(SampleInputs.postorderTraversal)
-    // );
-    // expect(new Set(SampleBst.inorderTraversal(SampleBst.root))).toEqual(
-    //   new Set(SampleInputs.inorderTraversal)
-    // );
+    expect(new Set(SampleBst.preorderTraversal(SampleBst.root))).toEqual(
+      new Set(SampleInputs.preorderTraversal)
+    );
+    expect(new Set(SampleBst.postorderTraversal(SampleBst.root))).toEqual(
+      new Set(SampleInputs.postorderTraversal)
+    );
+    expect(new Set(SampleBst.inorderTraversal(SampleBst.root))).toEqual(
+      new Set(SampleInputs.inorderTraversal)
+    );
   });
 
   test("searching for a node", () => {
