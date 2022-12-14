@@ -1,60 +1,85 @@
-export class MinHeap {
-  constructor(selector) {
-    this.items = [];
-    this.selector = selector;
+class BinaryHeap {
+  constructor(comparator = (a, b) => a > b) {
+    this._heap = [];
+    this._comparator = comparator;
   }
 
-  insert() {
-    let i = this.items.length;
-    this.items.push(item);
-    let parentIndex = Math.floor((i + 1) / 2 - 1);
-    if (parentIndex < 0) parentIndex = 0;
-    let parentVal = this.selector(this.items[parentIndex]);
-    const pushedVal = this.selector(this.items[i]);
-    while (i > 0 && parentVal > pushedVal) {
-      parentIndex = Math.floor((i + 1) / 2 - 1);
-      this.swap(i, parentIndex);
-      i = parentIndex;
-      parentVal = this.selector(
-        this.items[Math.max(Math.floor((i + 1) / 2 - 1), 0)]
-      );
+  size() {
+    return this._heap.length;
+  }
+
+  peek() {
+    return this._heap[0];
+  }
+
+  isEmpty() {
+    return this._heap.length === 0;
+  }
+
+  _parent(idx) {
+    return Math.floor((idx - 1) / 2);
+  }
+
+  _leftChild(idx) {
+    return idx * 2 + 1;
+  }
+
+  _rightChild(idx) {
+    return idx * 2 + 2;
+  }
+
+  _swap(i, j) {
+    [this._heap[i], this._heap[j]] = [this._heap[j], this._heap[i]];
+  }
+
+  _compare(i, j) {
+    return this._comparator(this._heap[i], this._heap[j]);
+  }
+
+  push(value) {
+    this._heap.push(value);
+    this._siftUp();
+
+    return this.size();
+  }
+
+  _siftUp() {
+    let nodeIdx = this.size() - 1;
+
+    while (0 < nodeIdx && this._compare(nodeIdx, this._parent(nodeIdx))) {
+      this._swap(nodeIdx, this._parent(nodeIdx));
+      nodeIdx = this._parent(nodeIdx);
     }
   }
 
-  remove() {
-    if (this.items.length <= 1) return this.items.pop();
-    const ret = this.items[0]; // What we will return
-    let temp = this.items.pop();
-    this.items[0] = temp; // Place last element in array at front
-    let i = 0; // We adjust heap from top to down
-    while (true) {
-      let rightChildIndex = (i + 1) * 2;
-      let leftChildIndex = (i + 1) * 2 - 1;
-      let lowest = rightChildIndex;
-      if (
-        leftChildIndex >= this.items.length &&
-        rightChildIndex >= this.items.length
-      )
-        break;
-      if (leftChildIndex >= this.items.length) lowest = rightChildIndex;
-      if (rightChildIndex >= this.items.length) lowest = leftChildIndex;
-      if (
-        !(leftChildIndex >= this.items.length) &&
-        !(rightChildIndex >= this.items.length)
-      ) {
-        lowest =
-          this.selector(this.items[rightChildIndex]) <
-          this.selector(this.items[leftChildIndex])
-            ? rightChildIndex
-            : leftChildIndex;
-      } // Find the smallest child
-      // If the parent is greater than the smallest child: swap
-      if (this.selector(this.items[i]) > this.selector(this.items[lowest])) {
-        this.swap(i, lowest);
-        i = lowest;
-      } else break; // We have finished setting up the heap
+  pop() {
+    if (this.size() > 1) {
+      this._swap(0, this.size() - 1);
     }
-    // Return topmost element
-    return ret;
+
+    const poppedValue = this._heap.pop();
+    this._siftDown();
+    return poppedValue;
+  }
+
+  _siftDown() {
+    let nodeIdx = 0;
+
+    while (
+      (this._leftChild(nodeIdx) < this.size() &&
+        this._compare(this._leftChild(nodeIdx), nodeIdx)) ||
+      (this._rightChild(nodeIdx) < this.size() &&
+        this._compare(this._rightChild(nodeIdx), nodeIdx))
+    ) {
+      const greaterChildIdx =
+        this._rightChild(nodeIdx) < this.size() &&
+        this._compare(this._rightChild(nodeIdx), this._leftChild(nodeIdx))
+          ? this._rightChild(nodeIdx)
+          : this._leftChild(nodeIdx);
+
+      this._swap(greaterChildIdx, nodeIdx);
+      nodeIdx = greaterChildIdx;
+    }
   }
 }
+

@@ -32,14 +32,14 @@ export class BST {
   }
 
   isValidBST = () => {
-    const helper = (node, min, max) => {
+    const isValidBSTUitl = (node, min, max) => {
       if (!node) return true;
       if (node.data <= min || node.data >= max) return false;
       return (
-        helper(node.left, min, node.data) && helper(node.right, node.data, max)
+        isValidBSTUitl(node.left, min, node.data) && isValidBSTUitl(node.right, node.data, max)
       );
     };
-    return helper(this.root, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+    return isValidBSTUitl(this.root, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
   };
 
   searchNode(node, data) {
@@ -53,10 +53,10 @@ export class BST {
     const removeNode = (node, key) => {
       if (node === null) return null;
       else if (key < node.data) {
-        node.left = this.removeNode(node.left, key);
+        node.left = removeNode(node.left, key);
         return node;
       } else if (key > node.data) {
-        node.right = this.removeNode(node.right, key);
+        node.right = removeNode(node.right, key);
         return node;
       } else {
         if (node.left === null && node.right === null) {
@@ -72,7 +72,7 @@ export class BST {
         }
         var aux = this.findMinNode(node.right);
         node.data = aux.data;
-        node.right = this.removeNode(node.right, aux.data);
+        node.right = removeNode(node.right, aux.data);
         return node;
       }
     };

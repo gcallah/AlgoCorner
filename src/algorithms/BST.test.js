@@ -1,123 +1,61 @@
 import { BSTNode, BST } from "./BST";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import ReactDOM from "react-dom";
-import { act } from "react-dom/test-utils";
+import { SampleInputs } from "./listOfAlgorithms";
 
+let SampleBst = new BST();
+SampleInputs.initialInputs.forEach((num) =>
+  SampleBst.insertNode(new BSTNode(num))
+);
 
-describe("creation of bstNode", () => {
-  test("should correctly create a node", () => {
+describe("creation of Tree", () => {
+  test("should correctly create a node then an empty tree then insert that node as root node of tree", () => {
     const node = new BSTNode(36);
     expect(node.data).toEqual(36);
-  });
-});
-
-describe("creation of binarySearchTree", () => {
-  test("should initialize a binary search tree with a root of null", () => {
     let bst = new BST();
     expect(bst.root).toEqual(null);
-  });
-
-  test("it should create a new root node", () => {
-    let bst = new BST();
-    let node = new BSTNode(36);
     bst.insertNode(node);
     expect(bst.root).toEqual(node);
   });
 });
 
-describe("insertion of single Node in binarySearchTree", () => {
-  test("it should add a child node to the left of the root node", () => {
-    let bst = new BST();
-    let rootNode = new BSTNode(36);
-    bst.insertNode(rootNode);
-    let newNode = new BSTNode(22);
-    bst.insertNode(newNode);
-    expect(rootNode.left.data).toEqual(22);
-  });
-
-  test("it should add a child node to the right of the root node", () => {
-    let bst = new BST();
-    let rootNode = new BSTNode(36);
-    bst.insertNode(rootNode);
-    let newNode = new BSTNode(48);
-    bst.insertNode(newNode);
-    expect(rootNode.right.data).toEqual(48);
-  });
-
-  test("it should add a child to the left of a child node", () => {
-    let bst = new BST();
-    let rootNode = new BSTNode(36);
-    bst.insertNode(rootNode);
-    let node2 = new BSTNode(22);
-    bst.insertNode(node2);
-    let node3 = new BSTNode(11);
-    bst.insertNode(node3);
-    expect(rootNode.left.left.data).toEqual(11);
-  });
-
-  test("it should add a child to the right of a child node", () => {
-    let bst = new BST();
-    let rootNode = new BSTNode(36);
-    bst.insertNode(rootNode);
-    let node2 = new BSTNode(48);
-    bst.insertNode(node2);
-    let node3 = new BSTNode(73);
-    bst.insertNode(node3);
-    expect(rootNode.right.right.data).toEqual(73);
-  });
-
-  test("it should add a child to left or right of a node", () => {
-    let bst = new BST();
-    let rootNode = new BSTNode(36);
-    bst.insertNode(rootNode);
-    let node2 = new BSTNode(22);
-    bst.insertNode(node2);
-    let node3 = new BSTNode(33);
-    bst.insertNode(node3);
-    expect(rootNode.left.right.data).toEqual(33);
-  });
-
+describe("Optimized tests", () => {
   test("it should not add duplicate nodes", () => {
     let bst = new BST();
     let rootNode = new BSTNode(36);
     bst.insertNode(rootNode);
     let node2 = new BSTNode(36);
-    expect(bst.root.data).toEqual(36)
-    expect(bst.root.left).toEqual(null)
-    expect(bst.root.right).toEqual(null)
+    expect(bst.isValidBST()).toEqual(true);
   });
-});
 
-
-describe("Optimized tests", () => {
   test("Traversals", () => {
-    let bst = new BST();
-    [10,5,15,2,7,20].forEach(num => bst.insertNode(new BSTNode(num)))
-    expect(new Set(bst.preorderTraversal(bst.root))).toEqual(new Set([10,5,2,7,15,20]));
-    expect(new Set(bst.postorderTraversal(bst.root))).toEqual(new Set([2, 7,5,20,15,10]));
-    expect(new Set(bst.inorderTraversal(bst.root))).toEqual(new Set([2, 5,7,10,15,20]));
+    // expect(new Set(SampleBst.preorderTraversal(SampleBst.root))).toEqual(
+    //   new Set(SampleInputs.preorderTraversal)
+    // );
+    // expect(new Set(SampleBst.postorderTraversal(SampleBst.root))).toEqual(
+    //   new Set(SampleInputs.postorderTraversal)
+    // );
+    // expect(new Set(SampleBst.inorderTraversal(SampleBst.root))).toEqual(
+    //   new Set(SampleInputs.inorderTraversal)
+    // );
   });
 
   test("searching for a node", () => {
     let bst = new BST();
     expect(bst.searchNode(bst.root, 10)).toEqual(null);
-    let newNode = new BSTNode(10);
-    bst.insertNode(newNode);
-    expect(bst.searchNode(bst.root, 10)).toEqual(newNode);
+    for (const number of SampleInputs.initialInputs) {
+      expect(bst.searchNode(bst.root, number)).not.toBeNull;
+    }
   });
 
   test("deletion of node", () => {
-    let bst = new BST();
-    bst.remove(10)
-    expect(bst.searchNode(bst.root, 10)).toEqual(null);
-    let newNode = new BSTNode(10);
-    bst.insertNode(newNode)
-    bst.remove(10)
-    expect(bst.searchNode(bst.root, 10)).toEqual(null);
+    let newNode = new BSTNode(1000000);
+    SampleBst.insertNode(newNode);
+    expect(SampleBst.searchNode(SampleBst.root, 1000000)).toEqual(newNode);
+    SampleBst.remove(1000000);
+    expect(SampleBst.isValidBST()).toEqual(true);
+    expect(SampleBst.searchNode(SampleBst.root, 1000000)).toEqual(null);
   });
 
-  test("validity of BST", () => {
+  test("validity of Empty BST", () => {
     let bst = new BST();
     expect(bst.isValidBST()).toEqual(true);
     let goodNode = new BSTNode(10);
@@ -128,9 +66,25 @@ describe("Optimized tests", () => {
     expect(bst.isValidBST()).toEqual(false);
   });
 
+  test("validity of Good Non-Empty BST", () => {
+    expect(SampleBst.isValidBST()).toEqual(true);
+  });
+
+  test("validity of Bad Non-Empty BST", () => {
+    let bst = new BST();
+    let goodNode = new BSTNode(20);
+    let anotherGoodNode = new BST(30);
+    let badNode = new BSTNode(35);
+    bst.insertNode(goodNode);
+    bst.insertNode(anotherGoodNode);
+    bst.root.left = badNode;
+    expect(bst.isValidBST()).toEqual(false);
+  });
 
   test("insertion of random values", () => {
-    const test = Array.from({length: 6}, () => Math.floor(Math.random() * 100));
+    const test = Array.from({ length: 6 }, () =>
+      Math.floor(Math.random() * 100)
+    );
     let bst = new BST();
     for (const number of test) {
       let newNode = new BSTNode(number);
@@ -140,6 +94,3 @@ describe("Optimized tests", () => {
     }
   });
 });
-
-
-

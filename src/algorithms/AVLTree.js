@@ -1,102 +1,140 @@
-class AVLTree {
+export class AVLNode {
+  constructor(data) {
+    this.data = data;
+    this.left = null;
+    this.right = null;
+    this.height = 1;
+  }
+}
+
+export class AVLTree {
   constructor() {
-     // Initialize a root element to null.
-     this.root = null;
+    // Initialize a root element to null.
+    this.root = null;
   }
 
   getBalanceFactor(root) {
-     return this.getHeight(root.left) - this.getHeight(root.right);
+    if (!root) return 0;
+    return this.getHeight(root.left) - this.getHeight(root.right);
   }
 
   getHeight(root) {
-     let height = 0;
-     if (root === null || typeof root == "undefined") {
-        height = -1;
-     } else {
-        height = Math.max(this.getHeight(root.left), this.getHeight(root.right)) + 1;
-     }
-     return height;
+    if (!root) return 0;
+    return root.height;
   }
 
-  insert(data) {
-     let node = new this.Node(data);
-     // Check if the tree is empty
-     if (this.root === null) {
-        // Insert as the first element this.root = node;
-     } else {
-        insertHelper(this, this.root, node);
-     }
+  insert(root, nodeValue) {
+    let node = new AVLNode(nodeValue);
+    if (root === null) return node;
+    else if (nodeValue < root.data)
+      root.left = this.insert(root.left, nodeValue);
+    else root.right = this.insert(root.right, nodeValue);
+    root.height =
+      1 + Math.max(this.getHeight(root.left), this.getHeight(root.right));
+    let balance = this.getBalanceFactor(root);
+    if (balance > 1 && nodeValue < root.left.data)
+      return this.rightRotate(root);
+    if (balance > 1 && nodeValue > rootNode.left.data) {
+      root.left = this.leftRotate(root.left);
+      return this.rightRotate(root);
+    }
+    if (balance < -1 && nodeValue < root.right.data)
+      return this.leftRotate(root);
+    if (balance < -1 && nodeValue < root.right.data) {
+      root.right = this.rightRotate(root.right);
+      return this.leftRotate(root);
+    }
+    return root;
   }
-  inOrder() {
-     inOrderHelper(this.root);
+
+  rightRotate(disbalanceNode) {
+    let newRoot = disbalanceNode.left;
+    disbalanceNode.left = disbalanceNode.left.right;
+    newRoot.right = disbalanceNode;
+    disbalanceNode.height =
+      1 +
+      Math.max(getHeight(disbalanceNode.left), getHeight(disbalanceNode.right));
+    newRoot.height =
+      1 + Math.max(getHeight(newRoot.left), getHeight(newRoot.right));
+    return newRoot;
   }
-}
 
-AVLTree.prototype.Node = class {
-  constructor(data, left = null, right = null) {
-     this.data = data;
-     this.left = left;
-     this.right = right;
+  leftRotate(disbalanceNode) {
+    let newRoot = disbalanceNode.left;
+    disbalanceNode.right = disbalanceNode.right.left;
+    newRoot.left = disbalanceNode;
+    disbalanceNode.height =
+      1 +
+      Math.max(getHeight(disbalanceNode.left), getHeight(disbalanceNode.right));
+    newRoot.height =
+      1 + Math.max(getHeight(newRoot.left), getHeight(newRoot.right));
+    return newRoot;
   }
-};
 
-function insertHelper(self, root, node) {
-  (root === null) {
-     root = node;
-  } else if (node.data < root.data) {
-     // Go left!
-     root.left = insertHelper(self, root.left, node);
-     // Check for balance factor and perform appropriate rotation
-     if (root.left !== null && self.getBalanceFactor(root) > 1) {
-     if (node.data > root.left.data) {
-        root = rotationLL(root);
-     } else {
-        root = rotationLR(root);
-     }
+  inorderTraversal(node) {
+    if (!node) return [];
+    return this.inorderTraversal(node.left).concat(
+      [node.data],
+      this.inorderTraversal(node.right)
+    );
   }
-} else if (node.data > root.data) {
-  // Go Right! root.
-  right = insertHelper(self, root.right, node);
-  // Check for balance factor and perform appropriate rotation
-  if (root.right !== null && self.getBalanceFactor(root) < -1) {
-     if (node.data > root.right.data) {
-        root = rotationRR(root);
-     } else {
-        root = rotationRL(root);
-     }
+
+  postorderTraversal(node) {
+    if (!node) return [];
+    return this.postorderTraversal(node.left).concat(
+      this.postorderTraversal(node.right),
+      [node.data]
+    );
   }
-}
-return root;
-}
 
-function inOrderHelper(root) {
-  if (root !== null) {
-     inOrderHelper(root.left);
-     console.log(root.data);
-     inOrderHelper(root.right);
+  preorderTraversal(node) {
+    if (!node) return [];
+    return [node.data].concat(
+      this.preorderTraversal(node.left),
+      this.preorderTraversal(node.right)
+    );
   }
-}
 
-function rotationLL(node) {
-  let tmp = node.left;
-  node.left = tmp.right;
-  tmp.right = node;
-  return tmp;
-}
+  getMinValue(root) {
+    if (!root || !root.left) return root;
+    return this.getMinValue(root.left);
+  }
 
-function rotationRR(node) {
-  let tmp = node.right;
-  node.right = tmp.left;
-  tmp.left = node;
-  return tmp;
-}
+  delete(root, nodeValue) {
+    if (root === null) return root;
+    else if (nodeValue < root.data)
+      root.left = this.delete(root.left, nodeValue);
+    else if (nodeValue > root.data)
+      root.right = this.delete(root.right, nodeValue);
+    else {
+      if (!root.left) {
+        let temp = root.right;
+        root = null;
+        return temp;
+      } else if (!root.right) {
+        let temp = root.left;
+        root = null;
+        return temp;
+      }
+      let temp = this.getMinValue(root.right);
+      root.data = temp.data;
+      root.right = this.delete(root.right, temp.data);
+    }
+    let balance = this.getBalanceFactor(root);
+    if (balance > 1 && this.getBalanceFactor(root.left) >= 0)
+      return this.rightRotate(root);
+    if (balance < -1 && this.getBalanceFactor(root.right) <= 0) {
+      return this.leftRotate(root);
+    }
+    if (balance > 1 && this.getBalanceFactor(root.left) < 0) {
+      root.left = this.leftRotate(root.left);
+      return this.rightRotate(root);
+    }
 
-function rotationLR(node) {
-  node.left = rotationRR(node.left);
-  return rotationLL(node);
-}
-
-function rotationRL(node) {
-  node.right = rotationLL(node.right);
-  return rotationRR(node);
+    if (balance < -1 && this.getBalanceFactor(root.right) > 0) {
+      root.right = this.rightRotate(root.right);
+      return this.leftRotate(root);
+    }
+    return root;
+  }
 }
