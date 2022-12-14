@@ -1,4 +1,4 @@
-export default class Graph {
+export class Graph {
   constructor(v) {
     // Number of vertices
     this.V = v;
@@ -47,7 +47,8 @@ export default class Graph {
     }
   }
 
-  traversalBFS = function (graph) {
+  traversalBFS = function () {
+    const graph = this.adj;
     const seen = {};
     const queue = [0];
     const values = [];
@@ -70,7 +71,7 @@ export default class Graph {
     return values;
   };
 
-  traversalDFS = function (vertex, graph, values, seen) {
+  traversalDFS = function (vertex=0, graph=this.adj, values=[], seen={}) {
     values.push(vertex);
     seen[vertex] = true;
 
@@ -79,8 +80,9 @@ export default class Graph {
       const connection = connections[i];
 
       if (!seen[connection]) {
-        traversalDFS(connection, graph, values, seen);
+        this.traversalDFS(connection, graph, values, seen);
       }
     }
+    return values;
   };
 }

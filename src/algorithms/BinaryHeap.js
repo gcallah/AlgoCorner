@@ -1,4 +1,4 @@
-class BinaryHeap {
+export default class BinaryHeap {
   constructor(comparator = (a, b) => a > b) {
     this._heap = [];
     this._comparator = comparator;
@@ -50,6 +50,10 @@ class BinaryHeap {
       this._swap(nodeIdx, this._parent(nodeIdx));
       nodeIdx = this._parent(nodeIdx);
     }
+  }
+
+  contains(value) {
+    return this._heap.includes(value);
   }
 
   pop() {
